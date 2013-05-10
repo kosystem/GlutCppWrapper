@@ -25,6 +25,7 @@ namespace glutCppWrapper{
     void incrimentCameraAngle(float dPan, float dTilt);
     void moveLookAtPoint(int dx, int dy);
     void drawAxis(float lenght);
+    void overlayDispray(char *string, int x, int y);
     MouseState mouseState;
   };
 }

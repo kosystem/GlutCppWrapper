@@ -1,4 +1,5 @@
 #include "GlutViewController.h"
+#include <string.h>
 
 namespace glutCppWrapper{
 	GlutViewController::GlutViewController()
@@ -21,7 +22,8 @@ namespace glutCppWrapper{
 		drawAxis(10);
 		glPopMatrix();
 
-		//TODO Add overlay display
+		char string[] = "Test message";
+		overlayDispray(string, 0, 0);
 	}
 
 
@@ -105,5 +107,41 @@ namespace glutCppWrapper{
 		camera.lock_x -= dx * cos(camera.pan) + dy*sin(camera.tilt)*sin(camera.pan);
 		camera.lock_y += dy * cos(camera.tilt);
 		camera.lock_z += dx * sin(camera.pan) - dy*sin(camera.tilt)*cos(camera.pan);
+	}
+
+	void GlutViewController::overlayDispray(char *string, int x, int y)
+	{
+		//TODO right-aligned and buttom-aligned
+		char buf[128];
+		strcpy(buf, "\n");
+		strcat(buf, string);
+
+		glColor3f(0.0, 0.0, 0.0);
+
+		glDisable(GL_LIGHTING);
+		glDisable(GL_LIGHT0);
+
+		glMatrixMode(GL_PROJECTION);
+		glPushMatrix();
+		glLoadIdentity();
+		glOrtho(	0.0, 2.0, 2.0, 0.0, -1.0, 1.0 );
+		glMatrixMode(GL_MODELVIEW);
+		glPushMatrix();
+		glLoadIdentity();
+		glPushAttrib(GL_ENABLE_BIT );
+		glDisable( GL_DEPTH_TEST );
+		glDisable( GL_CULL_FACE );
+
+		glRasterPos3f( x, y, 0.0 );
+		glutBitmapString( GLUT_BITMAP_HELVETICA_12, reinterpret_cast<const unsigned char*>(buf) );
+
+		glPopAttrib();
+		glPopMatrix();
+		glMatrixMode(GL_PROJECTION);
+		glPopMatrix();
+		glMatrixMode(GL_MODELVIEW);
+
+		glEnable(GL_LIGHTING);
+		glEnable(GL_LIGHT0);
 	}
 }
