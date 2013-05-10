@@ -28,12 +28,12 @@ namespace glutCppWrapper {
 		glutCreateWindow(title.c_str());
 
 		// Function callbacks
-		glutDisplayFunc(displayWrapper);		// NO ERRORS!
-		glutReshapeFunc(reshapeWrapper);				//TODO
+		glutDisplayFunc(displayWrapper);
+		glutReshapeFunc(reshapeWrapper);
 		glutIdleFunc(idleWrapper);
 
-		glutMouseFunc(mouseWrapper);	//TODO
-		glutMotionFunc(motionWrapper);				//TODO
+		glutMouseFunc(mouseWrapper);
+		glutMotionFunc(motionWrapper);
 		glutPassiveMotionFunc(passiveMotionWrapper);
 		glutMouseWheelFunc(mouseWheelWrapper) ;
 
@@ -50,7 +50,6 @@ namespace glutCppWrapper {
 
 		load();
 
-		//glutIdleFunc(idleWrapper); 	// Not using
 		glutMainLoop();				// Start the main GLUT thread
 	}
 
@@ -63,7 +62,7 @@ namespace glutCppWrapper {
 
 	void GlutCppWrapper::displayFramework()
 	{
-//		glClearColor(0.0, 0.0, 0.0, 1.0);
+		// Set background color
 		glClearColor(0.9, 0.9, 1.0, 1.0);
 
 		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ); // Clear once
@@ -96,6 +95,7 @@ namespace glutCppWrapper {
   }
 
 	void GlutCppWrapper::setupLights() {
+		// TODO multi lights
 		GLfloat light1_position[] = { 0.0, 1.0, 1.0, 0.0 };
 		GLfloat white_light[] = { 1.0, 1.0, 1.0, 1.0 };
 		GLfloat lmodel_ambient[] = { 0.4, 0.4, 0.4, 1.0 };
@@ -111,7 +111,7 @@ namespace glutCppWrapper {
 
 	void GlutCppWrapper::load()
 	{
-
+		//NOTE Model data load
 	}
 
 	void GlutCppWrapper::display()

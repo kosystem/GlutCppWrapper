@@ -11,6 +11,8 @@ namespace glutCppWrapper{
 
 	void GlutViewController::display()
 	{
+		//TODO opacity
+		glColor4f(1.0, 1.0, 1.0, 0.5);
 		glutSolidTeapot(50);
 		drawAxis(100);
 
@@ -18,6 +20,8 @@ namespace glutCppWrapper{
 		glTranslated(camera.lock_x, camera.lock_y, camera.lock_z);
 		drawAxis(10);
 		glPopMatrix();
+
+		//TODO Add overlay display
 	}
 
 
@@ -46,7 +50,7 @@ namespace glutCppWrapper{
 
 	void GlutViewController::mouse(int button, int state, int x, int y)
 	{
-		printf("MousePress: button: %d, state: %d, x: %d, y: %d\n", button, state, x, y);
+		//printf("MousePress: button: %d, state: %d, x: %d, y: %d\n", button, state, x, y);
 		mouseState.button = button;
 		mouseState.pressed = ~state;
 		mouseState.x = x;
