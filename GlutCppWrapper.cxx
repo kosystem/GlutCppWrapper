@@ -90,7 +90,7 @@ namespace glutCppWrapper {
     gluLookAt(camera.distance*sin(camera.pan)*cos(camera.tilt) + camera.lock_x,
               camera.distance*sin(camera.tilt) + camera.lock_y,
               camera.distance*cos(camera.pan)*cos(camera.tilt) + camera.lock_z,
-              camera.lock_x, camera.lock_y, camera.lock_x,
+              camera.lock_x, camera.lock_y, camera.lock_z,
               0.0, 1.0, 0.0);
   }
 

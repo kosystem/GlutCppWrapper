@@ -80,8 +80,9 @@ namespace glutCppWrapper{
 		else if (mouseState.button == 2 && mouseState.pressed)
 			{
 			// TODO Consider direction of camera
-			camera.lock_x += moved_x;
-			camera.lock_y += moved_y;
+			camera.lock_x -= moved_x * cos(camera.pan) + moved_y*sin(camera.tilt)*sin(camera.pan);
+			camera.lock_y += moved_y * cos(camera.tilt);
+			camera.lock_z += moved_x * sin(camera.pan) - moved_y*sin(camera.tilt)*cos(camera.pan);
 			}
 		mouseState.x = x;
 		mouseState.y = y;
