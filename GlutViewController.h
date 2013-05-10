@@ -22,6 +22,8 @@ namespace glutCppWrapper{
     virtual void mouseWheel(int wheel, int direction, int x, int y);
 
   protected:
+    void incrimentCameraAngle(float dPan, float dTilt);
+    void moveLookAtPoint(int dx, int dy);
     void drawAxis(float lenght);
     MouseState mouseState;
   };

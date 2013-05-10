@@ -72,17 +72,11 @@ namespace glutCppWrapper{
 		int moved_y = y - mouseState.y;
 		if (mouseState.button == 0 && mouseState.pressed)
 			{
-			camera.pan += moved_x/100.0;
-			camera.tilt += moved_y/100.0;
-			if (camera.tilt >= M_PI / 2.0) camera.tilt = M_PI / 2.0 - 0.001;
-			else if (camera.tilt <= -M_PI / 2.0) camera.tilt = - (M_PI / 2.0 - 0.001);
+			incrimentCameraAngle(moved_x/100.0, moved_y/100.0);
 			}
 		else if (mouseState.button == 2 && mouseState.pressed)
 			{
-			// TODO Consider direction of camera
-			camera.lock_x -= moved_x * cos(camera.pan) + moved_y*sin(camera.tilt)*sin(camera.pan);
-			camera.lock_y += moved_y * cos(camera.tilt);
-			camera.lock_z += moved_x * sin(camera.pan) - moved_y*sin(camera.tilt)*cos(camera.pan);
+			moveLookAtPoint(moved_x, moved_y);
 			}
 		mouseState.x = x;
 		mouseState.y = y;
@@ -91,9 +85,25 @@ namespace glutCppWrapper{
 	void GlutViewController::mouseWheel(int wheel, int direction, int x, int y)
 	{
 		if(direction==1){
-				camera.distance *= 1.125;
-		}else{
-				camera.distance *= 0.875;
-		}
+			camera.distance *= 1.125;
+			}else{
+			camera.distance *= 0.875;
+			}
+	}
+
+	void GlutViewController::incrimentCameraAngle(float dPan, float dTilt)
+	{
+		camera.pan += dPan;
+		camera.tilt += dTilt;
+		if (camera.tilt >= M_PI / 2.0) camera.tilt = M_PI / 2.0 - 0.001;
+		else if (camera.tilt <= -M_PI / 2.0) camera.tilt = - (M_PI / 2.0 - 0.001);
+	}
+
+	void GlutViewController::moveLookAtPoint(int dx, int dy)
+	{
+		//TODO Consider camera distance
+		camera.lock_x -= dx * cos(camera.pan) + dy*sin(camera.tilt)*sin(camera.pan);
+		camera.lock_y += dy * cos(camera.tilt);
+		camera.lock_z += dx * sin(camera.pan) - dy*sin(camera.tilt)*cos(camera.pan);
 	}
 }
