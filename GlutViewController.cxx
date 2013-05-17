@@ -13,13 +13,7 @@ GlutViewController::GlutViewController()
 void GlutViewController::display()
 {
   float opacity = 0.5;
-  GLfloat green[] = { 0.2, 1.0, 0.2, opacity };
-  GLfloat red[]   = { 1.0, 0.2, 0.2, opacity };
-  GLfloat blue[]  = { 0.3, 0.3, 1.0, opacity };
-  GLfloat black[] = { 0.0, 0.0, 0.0, opacity };
-  GLfloat yellow[] = { 0.9, 0.9, 0.0, opacity };
   GLfloat lightGray[] = { 0.7, 0.7, 0.7, opacity };
-  GLfloat pink[] = { 1.0, 0.0, 1.0, opacity };
 
   glPushMatrix();
   glTranslated(camera.lock_x, camera.lock_y, camera.lock_z);
@@ -32,12 +26,11 @@ void GlutViewController::display()
 //  glEnable(GL_BLEND);
 //  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+  drawAxis(15);
   glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, lightGray);
   drawModel(cubeModel);
 
-  glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, blue);
-  glTranslated(10.0, 0.0, 0.0);
-  drawModel(cubeModel);
+  glPopMatrix();
 
 //  glEnable(GL_DEPTH_TEST);
 //  glDisable(GL_BLEND);
@@ -121,7 +114,7 @@ void GlutViewController::motion(int x, int y)
   int moved_y = y - mouseState.y;
   if (mouseState.button == 0 && mouseState.pressed)
     {
-    incrimentCameraAngle(moved_x/100.0, moved_y/100.0);
+    incrimentCameraAngle(-moved_x/100.0, moved_y/100.0);
     }
   else if (mouseState.button == 2 && mouseState.pressed)
     {
