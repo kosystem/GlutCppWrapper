@@ -10,7 +10,7 @@ GlutViewController::GlutViewController()
   mouseState.y = 0;
 }
 
-void GlutViewController::display()
+void GlutViewController::display(double dt)
 {
   float opacity = 0.5;
   GLfloat green[] = { 0.2, 1.0, 0.2, opacity };
@@ -44,7 +44,8 @@ void GlutViewController::display()
 
   glPopMatrix();
 
-  char string[] = "Test message";
+  char string[128];
+  sprintf(string, "FPS : %.1lf", 1.0/dt);
   overlayDispray(string, 0, 0);
 }
 
@@ -163,7 +164,7 @@ void GlutViewController::overlayDispray(char *string, int x, int y)
   strcpy(buf, "\n");
   strcat(buf, string);
 
-  glColor3f(0.0, 0.0, 0.0);
+  glColor3f(1.0, 1.0, 1.0);
 
   glDisable(GL_LIGHTING);
   glDisable(GL_LIGHT0);

@@ -32,7 +32,7 @@ public:
   GlutCppWrapper();
 
   virtual void load();
-  virtual void display();
+  virtual void display(double dt);
   virtual void reshape(int width, int height);
   virtual void idle();
 
@@ -54,6 +54,7 @@ public:
   void setCamera();
   void setupLights();
 
+  void setFPS(double fps);
 
   static void displayWrapper();
   static void reshapeWrapper(int width, int height);
@@ -70,7 +71,15 @@ public:
   static void specialUpWrapper(int key, int x, int y);
 
 protected:
+  double getTime();
+  double getFrameElapsed();
+  double getDisplayElapsed();
+
   static GlutCppWrapper *instance;
+  struct timeval timer;
+  double elapsedTime;
+  double FPS;
+  double frameTimes, frameElapsed;
 
   Camera camera;
 
