@@ -57,6 +57,13 @@ void GlutViewController::load()
 
 void GlutViewController::drawAxis(float lenght)
 {
+  GLboolean lighting, light;
+  glGetBooleanv(GL_LIGHTING, &lighting);
+  glGetBooleanv(GL_LIGHT0, &light);
+
+  GLfloat color[4];
+  glGetFloatv(GL_CURRENT_COLOR , color);
+
   GLboolean depth;
   glGetBooleanv(GL_DEPTH_TEST, &depth);
   glEnable(GL_DEPTH_TEST);
@@ -76,12 +83,13 @@ void GlutViewController::drawAxis(float lenght)
   glVertex3f( 0.0, 0.0,    0.0);
   glVertex3f( 0.0, 0.0, lenght);
   glEnd();
-  glEnable(GL_LIGHTING);
-  glEnable(GL_LIGHT0);
+  if (lighting) glEnable(GL_LIGHTING);
+  if (light) glEnable(GL_LIGHT0);
   if(depth==false)
     {
     glDisable(GL_DEPTH_TEST);
     }
+  glColor4fv(color);
 
 }
 
@@ -122,7 +130,7 @@ void GlutViewController::motion(int x, int y)
   int moved_y = y - mouseState.y;
   if (mouseState.button == 0 && mouseState.pressed)
     {
-    incrimentCameraAngle(moved_x/100.0, moved_y/100.0);
+    incrimentCameraAngle(-moved_x/100.0, moved_y/100.0);
     }
   else if (mouseState.button == 2 && mouseState.pressed)
     {
@@ -166,6 +174,13 @@ void GlutViewController::overlayDispray(char *string, int x, int y)
 
   glColor3f(1.0, 1.0, 1.0);
 
+  GLboolean lighting, light;
+  glGetBooleanv(GL_LIGHTING, &lighting);
+  glGetBooleanv(GL_LIGHT0, &light);
+
+  GLfloat color[4];
+  glGetFloatv(GL_CURRENT_COLOR , color);
+
   glDisable(GL_LIGHTING);
   glDisable(GL_LIGHT0);
 
@@ -189,8 +204,9 @@ void GlutViewController::overlayDispray(char *string, int x, int y)
   glPopMatrix();
   glMatrixMode(GL_MODELVIEW);
 
-  glEnable(GL_LIGHTING);
-  glEnable(GL_LIGHT0);
+  if (lighting) glEnable(GL_LIGHTING);
+  if (light) glEnable(GL_LIGHT0);
+  glColor4fv(color);
 }
 
 } //namespace glutCppWrapper
