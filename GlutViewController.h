@@ -17,7 +17,7 @@ class GlutViewController : public GlutCppWrapper
 {
 public:
   GlutViewController();
-  virtual void display();
+  virtual void display(double dt);
   virtual void load();
 
   virtual void mouse(int button, int state, int x, int y);

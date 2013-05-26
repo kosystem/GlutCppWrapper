@@ -1,4 +1,5 @@
 #include "GlutCppWrapper.h"
+#include <sys/time.h>
 
 namespace glutCppWrapper {
 
@@ -14,6 +15,8 @@ GlutCppWrapper::GlutCppWrapper()
   camera.distance = 300;
   camera.pan = 0.0;
   camera.tilt = 0.0;
+
+  this->setFPS(60);
 }
 
 void GlutCppWrapper::startFramework(int argc, char *argv[]) {
@@ -48,6 +51,9 @@ void GlutCppWrapper::startFramework(int argc, char *argv[]) {
   glShadeModel(GL_SMOOTH);
   glEnable(GL_DEPTH_TEST);
 
+  getFrameElapsed();
+  getDisplayElapsed();
+
   load();
 
   glutMainLoop();				// Start the main GLUT thread
@@ -63,14 +69,14 @@ void GlutCppWrapper::setInstance()
 void GlutCppWrapper::displayFramework()
 {
   // Set background color
-  glClearColor(0.9, 0.9, 1.0, 1.0);
+  glClearColor(0.0, 0.0, 0.0, 1.0);
 
   glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ); // Clear once
 
   setupLights();
   setCamera();
 
-  display();
+  display(getDisplayElapsed());
 
   glutSwapBuffers();
 }
@@ -109,12 +115,52 @@ void GlutCppWrapper::setupLights() {
   glLightModelfv( GL_LIGHT_MODEL_AMBIENT, lmodel_ambient );
 }
 
+void GlutCppWrapper::setFPS(double fps)
+{
+  FPS = fps;
+  frameTimes = 1.0 / FPS;
+}
+
+double GlutCppWrapper::getTime()
+{
+  gettimeofday(&timer, NULL);
+  return timer.tv_sec + timer.tv_usec*1.0E-6;
+}
+
+double GlutCppWrapper::getFrameElapsed()
+{
+  static double referenceTime;
+  double now , elapsed;
+  now = getTime();
+  if (referenceTime == 0.0)
+    {
+    referenceTime = now;
+    }
+  elapsed = now - referenceTime;
+  referenceTime = now;
+  return elapsed;
+}
+
+double GlutCppWrapper::getDisplayElapsed()
+{
+  static double referenceTime;
+  double now , elapsed;
+  now = getTime();
+  if (referenceTime == 0.0)
+    {
+    referenceTime = now;
+    }
+  elapsed = now - referenceTime;
+  referenceTime = now;
+  return elapsed;
+}
+
 void GlutCppWrapper::load()
 {
   //NOTE Model data load
 }
 
-void GlutCppWrapper::display()
+void GlutCppWrapper::display(double dt)
 {
   glutSolidTeapot(50);
 }
@@ -126,7 +172,12 @@ void GlutCppWrapper::reshape(int width, int height)
 
 void GlutCppWrapper::idle()
 {
-  glutPostRedisplay();
+  elapsedTime += getFrameElapsed();
+  if (elapsedTime >= frameTimes)
+    {
+    glutPostRedisplay();
+    elapsedTime -= frameTimes;
+    }
 }
 
 void GlutCppWrapper::mouse(int button, int state, int x, int y)

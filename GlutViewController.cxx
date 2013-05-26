@@ -10,7 +10,7 @@ GlutViewController::GlutViewController()
   mouseState.y = 0;
 }
 
-void GlutViewController::display()
+void GlutViewController::display(double dt)
 {
   float opacity = 0.5;
   GLfloat lightGray[] = { 0.7, 0.7, 0.7, opacity };
@@ -37,7 +37,8 @@ void GlutViewController::display()
 
   glPopMatrix();
 
-  char string[] = "Test message";
+  char string[128];
+  sprintf(string, "FPS : %.1lf", 1.0/dt);
   overlayDispray(string, 0, 0);
 }
 
@@ -49,6 +50,13 @@ void GlutViewController::load()
 
 void GlutViewController::drawAxis(float lenght)
 {
+  GLboolean lighting, light;
+  glGetBooleanv(GL_LIGHTING, &lighting);
+  glGetBooleanv(GL_LIGHT0, &light);
+
+  GLfloat color[4];
+  glGetFloatv(GL_CURRENT_COLOR , color);
+
   GLboolean depth;
   glGetBooleanv(GL_DEPTH_TEST, &depth);
   glEnable(GL_DEPTH_TEST);
@@ -68,12 +76,13 @@ void GlutViewController::drawAxis(float lenght)
   glVertex3f( 0.0, 0.0,    0.0);
   glVertex3f( 0.0, 0.0, lenght);
   glEnd();
-  glEnable(GL_LIGHTING);
-  glEnable(GL_LIGHT0);
+  if (lighting) glEnable(GL_LIGHTING);
+  if (light) glEnable(GL_LIGHT0);
   if(depth==false)
     {
     glDisable(GL_DEPTH_TEST);
     }
+  glColor4fv(color);
 
 }
 
@@ -156,7 +165,14 @@ void GlutViewController::overlayDispray(char *string, int x, int y)
   strcpy(buf, "\n");
   strcat(buf, string);
 
-  glColor3f(0.0, 0.0, 0.0);
+  glColor3f(1.0, 1.0, 1.0);
+
+  GLboolean lighting, light;
+  glGetBooleanv(GL_LIGHTING, &lighting);
+  glGetBooleanv(GL_LIGHT0, &light);
+
+  GLfloat color[4];
+  glGetFloatv(GL_CURRENT_COLOR , color);
 
   glDisable(GL_LIGHTING);
   glDisable(GL_LIGHT0);
@@ -181,8 +197,9 @@ void GlutViewController::overlayDispray(char *string, int x, int y)
   glPopMatrix();
   glMatrixMode(GL_MODELVIEW);
 
-  glEnable(GL_LIGHTING);
-  glEnable(GL_LIGHT0);
+  if (lighting) glEnable(GL_LIGHTING);
+  if (light) glEnable(GL_LIGHT0);
+  glColor4fv(color);
 }
 
 } //namespace glutCppWrapper
